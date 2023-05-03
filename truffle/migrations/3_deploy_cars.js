@@ -1,5 +1,5 @@
-const Cars = artifacts.require("Cars");
+const CarsContract = artifacts.require("CarsContract");
 
 module.exports = function (deployer) {
-  deployer.deploy(Cars);
+  deployer.deploy(CarsContract);
 };
