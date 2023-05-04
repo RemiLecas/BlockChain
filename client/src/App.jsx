@@ -83,27 +83,19 @@ function App() {
     // setBalance(count)
   }
 
-  const handleSubmit = async (event) => {
+  const addCars = async (event) => {
     event.preventDefault();
     await contract.methods.addCars(marque, modele, fuel, color, power, annee).send({ from: accounts[0] });
 
   }
 
-  const handleSubmit2 = async (event) => {
+  const getAllCars = async (event) => {
     event.preventDefault();
 
-    const cars = await Promise.all(
+    const allCars = await contract.methods.getAllCars().call();
 
-      Array(Number(numberCars))
-
-        .fill()
-
-        .map((_) => contract.methods.getAllCars().call())
-
-    );
-
-    console.log(cars);
-    setCars(cars);
+    console.log(allCars);
+    setCars(allCars);
 
 
   }
@@ -122,7 +114,7 @@ function App() {
 
         <hr />
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={addCars}>
           <label>Enter your marque:
             <input
               type="text"
@@ -169,8 +161,19 @@ function App() {
         </form>
 
         <div>
-          <button onClick={handleSubmit2}>Get All Cars</button>
+          <button onClick={getAllCars}>Get All Cars</button>
         </div>
+
+        <div>
+          <ul>
+            {cars.map((car, index) => (
+              <li key={index}>
+                Marque : {car.marque} | Modèle : {car.modele} | Année : {car.annee} | Fuel : {car._fuel} | Color : {car._color} | Power : {car._power}
+              </li>
+            ))}
+          </ul>
+        </div>
+
       </div>
     </div>
   );
