@@ -15,7 +15,8 @@ function App() {
   const [color, setColor] = useState("");
   const [power, setPower] = useState(0);
   const [annee, setAnnee] = useState(0);
-
+  const numberCars = 0;
+  const [cars, setCars] = useState([]);
 
   const [balance, setBalance] = useState();
 
@@ -25,8 +26,6 @@ function App() {
   async function init() {
     // Je lance mon check de compte
     await checkAccount();
-
-
   }
 
 
@@ -36,6 +35,7 @@ function App() {
       try {
         await window.ethereum.enable();
 
+        // J'init maintenant mon Web3 pour obtenir mon contrat déployé
         const web3 = new Web3(window.ethereum);
         console.log(web3);
 
@@ -86,6 +86,26 @@ function App() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     await contract.methods.addCars(marque, modele, fuel, color, power, annee).send({ from: accounts[0] });
+
+  }
+
+  const handleSubmit2 = async (event) => {
+    event.preventDefault();
+
+    const cars = await Promise.all(
+
+      Array(Number(numberCars))
+
+        .fill()
+
+        .map((_) => contract.methods.getAllCars().call())
+
+    );
+
+    console.log(cars);
+    setCars(cars);
+
+
   }
 
   useEffect(() => {
@@ -147,6 +167,10 @@ function App() {
           </label>
           <input type="submit" />
         </form>
+
+        <div>
+          <button onClick={handleSubmit2}>Get All Cars</button>
+        </div>
       </div>
     </div>
   );

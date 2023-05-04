@@ -2,6 +2,13 @@
 pragma solidity >=0.4.22 <0.9.0;
 
 contract CarsContract {
+    uint256 public numberCars;
+
+
+    constructor() {
+        numberCars = 0;
+    }
+
     struct Cars {
         uint256 id;
         string marque;
@@ -26,6 +33,7 @@ contract CarsContract {
         carss.push(
             Cars(carsId, _marque, _modele, _fuel, _color, _power, _annee)
         );
+        numberCars++;
     }
 
     function getAllCars() public view returns (Cars[] memory) {
