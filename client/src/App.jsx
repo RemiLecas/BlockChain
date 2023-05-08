@@ -70,7 +70,7 @@ function App() {
   return (
     <div id="App">
       <div className="container">
-        <p>{accounts}</p>
+        <p>Wallet : {accounts}</p>
 
         <button onClick={getBalanced}>Balanced</button>
         <p>{balance}</p>

@@ -64,6 +64,7 @@ export default function AddDialog({ index }) {
                 setContract(contract);
 
                 await contract.methods.addCars(marque, modele, fuel, color, power, annee, price).send({ from: accounts[0] });
+                setOpen(false);
 
             } catch (error) {
                 console.error(error);
@@ -150,7 +151,6 @@ export default function AddDialog({ index }) {
                                     />
                                 </label>
                             </div>
-                            <input type="submit" />
                         </form>
                     </DialogContentText>
                 </DialogContent>

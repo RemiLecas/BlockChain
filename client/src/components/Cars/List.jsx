@@ -63,10 +63,10 @@ function ListCars() {
     return (
         <div>
             <h2>List of cars</h2>
-            <div className="card">
-                <div className="container">
-                    {cars.map((car, index) => (
-                        <div key={index}>
+            {cars.map((car, index) => (
+                <div key={index}>
+                    <div className="card">
+                        <div className="container">
                             <h5>Marque : {car.marque} </h5>
                             <h5>Modèle : {car.modele} </h5>
                             <h5>Année : {car.annee} </h5>
@@ -76,9 +76,9 @@ function ListCars() {
                             <h5>Price : {car.price} </h5>
                             <DeleteDialog index={index} />
                         </div>
-                    ))}
+                    </div>
                 </div>
-            </div>
+            ))}
         </div>
     );
 }
