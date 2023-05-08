@@ -1,6 +1,7 @@
 import Web3 from "web3";
-import AlertDialog from "../Dialogs/deleteDialog"
+import DeleteDialog from "../Dialogs/deleteDialog"
 import { useEffect, useState } from "react";
+import "./List.css";
 
 import CarsContract from "../../contracts/CarsContract.json";
 
@@ -10,6 +11,7 @@ function ListCars() {
     const numberCars = 0;
     const [cars, setCars] = useState([]);
     const [accounts, setAccounts] = useState([]);
+    const [value, setValue] = useState(0);
 
 
     async function init() {
@@ -45,6 +47,7 @@ function ListCars() {
                 const allCars = await contract.methods.getAllCars().call();
                 console.log(allCars);
                 setCars(allCars);
+
             } catch (error) {
                 console.error(error);
             }
@@ -53,33 +56,29 @@ function ListCars() {
         }
     }
 
-    async function getAllCars() {
-        const allCars = await contract.methods.getAllCars().call();
-        console.log(allCars);
-        setCars(allCars);
-    }
-
     useEffect(() => {
         init();
     }, [])
 
     return (
-        <div id="App">
-            <div className="container">
-                <h2>List of cars</h2>
-                <div>
-                    <ul>
-                        {cars.map((car, index) => (
-                            <li key={index}>
-                                Marque : {car.marque} | Modèle : {car.modele} | Année : {car.annee} | Fuel : {car._fuel} | Color : {car._color} | Power : {car._power}
-                            </li>
-                        ))}
-                        <AlertDialog />
-                    </ul>
+        <div>
+            <h2>List of cars</h2>
+            <div className="card">
+                <div className="container">
+                    {cars.map((car, index) => (
+                        <div key={index}>
+                            <h5>Marque : {car.marque} </h5>
+                            <h5>Modèle : {car.modele} </h5>
+                            <h5>Année : {car.annee} </h5>
+                            <h5>Fuel : {car._fuel} </h5>
+                            <h5>Color : {car._color} </h5>
+                            <h5>Power : {car._power} </h5>
+                            <h5>Price : {car.price} </h5>
+                            <DeleteDialog index={index} />
+                        </div>
+                    ))}
                 </div>
             </div>
-
-
         </div>
     );
 }

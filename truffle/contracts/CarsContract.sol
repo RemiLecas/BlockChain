@@ -75,8 +75,9 @@ contract CarsContract {
 
     // Permet de supprimer une voiture
     function deleteCars(uint256 index) public {
-        // Vérification de l'index si il est valide
-        require(index < carss.length && msg.sender == carss[index].owner);
+        // Vérification de l'index s'il est valide + vérification que ca soit bien le owner du véhicule
+        require(index < carss.length);
+        require(msg.sender == carss[index].owner);
 
         totalPrice -= carss[index].price;
         numberCars -= 1;
@@ -105,7 +106,8 @@ contract CarsContract {
         uint256 _price
     ) public {
         // Vérification de l'index si il est valide
-        require(index < carss.length && msg.sender == carss[index].owner);
+        require(index < carss.length);
+        require(msg.sender == carss[index].owner);
         Cars storage car = carss[index]; // Récupère la voiture à l'index donné
 
         // On enlève l'ancien prix pour mettre le nouveau

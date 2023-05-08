@@ -73,15 +73,6 @@ function App() {
     event.preventDefault();
     await contract.methods.addCars(marque, modele, fuel, color, power, annee, price).send({ from: accounts[0] });
 
-    // J'appelle toute mes voitures pour actualiser ma liste
-    getAllCars();
-
-  }
-
-  async function getAllCars() {
-    const allCars = await contract.methods.getAllCars().call();
-    console.log(allCars);
-    setCars(allCars);
   }
 
   useEffect(() => {
