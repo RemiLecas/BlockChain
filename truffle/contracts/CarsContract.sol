@@ -56,35 +56,44 @@ contract CarsContract {
                 _owner
             )
         );
+        // Ajoute +1 au nombre de voiture total
         numberCars++;
 
+        // Ajoute le prix de la voiture au montant total du parc
         totalPrice += _price;
     }
 
+    // Retourne toutes les voitures
     function getAllCars() public view returns (Cars[] memory) {
         return carss;
     }
 
+    // Retourne le prix total de toute les voitures
     function getTotalPriceCars() public view returns (uint256) {
         return totalPrice;
     }
 
+    // Permet de supprimer une voiture
     function deleteCars(uint256 index) public {
         // Vérification de l'index si il est valide
         require(index < carss.length && msg.sender == carss[index].owner);
 
         totalPrice -= carss[index].price;
+        numberCars -= 1;
         delete carss[index];
     }
 
+    // permet d'avoir le nombre de voiture
     function getNumbersOfCars() public view returns (uint256) {
         return numberCars;
     }
 
+    // Récupére le montant total du compte de l'utilisateur
     function getBalance() public view returns (uint256) {
         return msg.sender.balance;
     }
 
+    // Permet de modifier une voiture
     function modifyCars(
         uint256 index,
         string memory _marque,
@@ -119,15 +128,18 @@ contract CarsContract {
         totalPrice += _price;
     }
 
+    // Récupére le propriétaire du véhicule
     function getOwner() public view returns (address) {
         return owner;
     }
 
+    // Change le propriétaire du véhicule
     function changeOwner(address newOwner) public {
         require(msg.sender == owner);
         owner = newOwner;
     }
 
+    // Sert à savoir si le véhicule nous appartient
     function isMine() public view returns (bool) {
         return (owner == msg.sender);
     }

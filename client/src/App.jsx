@@ -2,6 +2,7 @@ import Web3 from "web3";
 import { useEffect, useState } from "react";
 
 import CarsContract from "./contracts/CarsContract.json";
+import ListCars from "./components/Cars/List";
 
 function App() {
   const [contract, setContract] = useState(null);
@@ -13,6 +14,7 @@ function App() {
   const [color, setColor] = useState("");
   const [power, setPower] = useState(0);
   const [annee, setAnnee] = useState(0);
+  const [price, setPrice] = useState(0);
   const numberCars = 0;
   const [cars, setCars] = useState([]);
 
@@ -69,7 +71,7 @@ function App() {
 
   const addCars = async (event) => {
     event.preventDefault();
-    await contract.methods.addCars(marque, modele, fuel, color, power, annee).send({ from: accounts[0] });
+    await contract.methods.addCars(marque, modele, fuel, color, power, annee, price).send({ from: accounts[0] });
 
     // J'appelle toute mes voitures pour actualiser ma liste
     getAllCars();
@@ -152,22 +154,19 @@ function App() {
               />
             </label>
           </div>
+          <div>
+            <label>Enter your price:
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </label>
+          </div>
           <input type="submit" />
         </form>
-        
-        <div>
-          <h2>List of cars</h2>
-          <div>
-            <ul>
-              {cars.map((car, index) => (
-                <li key={index}>
-                  Marque : {car.marque} | Modèle : {car.modele} | Année : {car.annee} | Fuel : {car._fuel} | Color : {car._color} | Power : {car._power}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
 
+        <ListCars />
       </div>
     </div>
   );
