@@ -3,20 +3,14 @@ import { useEffect, useState } from "react";
 
 import CarsContract from "./contracts/CarsContract.json";
 import ListCars from "./components/Cars/List";
+import AddDialog from "./components/Dialogs/addDialog";
 
 function App() {
   const [contract, setContract] = useState(null);
   const [accounts, setAccounts] = useState([]);
   const [web3, setWeb3] = useState(null);
-  const [marque, setMarque] = useState("");
-  const [modele, setModele] = useState("");
-  const [fuel, setFuel] = useState("");
-  const [color, setColor] = useState("");
-  const [power, setPower] = useState(0);
-  const [annee, setAnnee] = useState(0);
-  const [price, setPrice] = useState(0);
-  const numberCars = 0;
   const [cars, setCars] = useState([]);
+
 
   const [balance, setBalance] = useState();
 
@@ -69,12 +63,6 @@ function App() {
     // setBalance(count)
   }
 
-  const addCars = async (event) => {
-    event.preventDefault();
-    await contract.methods.addCars(marque, modele, fuel, color, power, annee, price).send({ from: accounts[0] });
-
-  }
-
   useEffect(() => {
     init();
   }, [])
@@ -90,72 +78,7 @@ function App() {
         <hr />
         <h2>Form add cars</h2>
 
-        <form onSubmit={addCars}>
-          <div>
-            <label>Enter your marque:
-              <input
-                type="text"
-                value={marque}
-                onChange={(e) => setMarque(e.target.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <label>Enter your modele:
-              <input
-                type="text"
-                value={modele}
-                onChange={(e) => setModele(e.target.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <label>Enter your fuel:
-              <input
-                type="text"
-                value={fuel}
-                onChange={(e) => setFuel(e.target.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <label>Enter your color:
-              <input
-                type="text"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <label>Enter your power:
-              <input
-                type="number"
-                value={power}
-                onChange={(e) => setPower(e.target.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <label>Enter your annee:
-              <input
-                type="number"
-                value={annee}
-                onChange={(e) => setAnnee(e.target.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <label>Enter your price:
-              <input
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
-            </label>
-          </div>
-          <input type="submit" />
-        </form>
+        <AddDialog />
 
         <ListCars />
       </div>
