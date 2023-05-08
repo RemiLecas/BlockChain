@@ -1,5 +1,6 @@
 import Web3 from "web3";
-import DeleteDialog from "../Dialogs/deleteDialog"
+import DeleteDialog from "../Dialogs/deleteDialog";
+import ModifyDialog from "../Dialogs/modifyDialog";
 import { useEffect, useState } from "react";
 import "./List.css";
 
@@ -70,10 +71,11 @@ function ListCars() {
                             <h5>Marque : {car.marque} </h5>
                             <h5>Modèle : {car.modele} </h5>
                             <h5>Année : {car.annee} </h5>
-                            <h5>Fuel : {car._fuel} </h5>
-                            <h5>Color : {car._color} </h5>
-                            <h5>Power : {car._power} </h5>
+                            <h5>Fuel : {car.fuel} </h5>
+                            <h5>Color : {car.color} </h5>
+                            <h5>Power : {car.power} </h5>
                             <h5>Price : {car.price} </h5>
+                            <ModifyDialog index={index} />
                             <DeleteDialog index={index} />
                         </div>
                     </div>

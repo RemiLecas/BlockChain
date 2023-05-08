@@ -106,7 +106,7 @@ contract CarsContract {
         uint256 _price
     ) public {
         // Vérification de l'index si il est valide
-        require(index < carss.length);
+        require(index < carss.length, "Index invalide");
         require(msg.sender == carss[index].owner);
         Cars storage car = carss[index]; // Récupère la voiture à l'index donné
 
@@ -144,5 +144,34 @@ contract CarsContract {
     // Sert à savoir si le véhicule nous appartient
     function isMine() public view returns (bool) {
         return (owner == msg.sender);
+    }
+
+    function getByIndex(
+        uint256 index
+    )
+        public
+        view
+        returns (
+            string memory,
+            string memory,
+            uint256,
+            address,
+            uint256,
+            string memory,
+            uint256
+        )
+    {
+        require(index < carss.length);
+
+        Cars storage car = carss[index];
+        return (
+            car.marque,
+            car.modele,
+            car.annee,
+            car.owner,
+            car.price,
+            car.fuel,
+            car.power
+        );
     }
 }

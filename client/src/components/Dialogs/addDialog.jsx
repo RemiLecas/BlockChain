@@ -10,7 +10,7 @@ import Web3 from "web3";
 import CarsContract from "../../contracts/CarsContract.json";
 
 
-export default function AddDialog({ index }) {
+export default function AddDialog() {
     const [open, setOpen] = React.useState(false);
     const [contract, setContract] = useState(null);
     const [web3, setWeb3] = useState(null);

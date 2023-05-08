@@ -9,7 +9,6 @@ function App() {
   const [contract, setContract] = useState(null);
   const [accounts, setAccounts] = useState([]);
   const [web3, setWeb3] = useState(null);
-  const [cars, setCars] = useState([]);
 
 
   const [balance, setBalance] = useState();
@@ -43,10 +42,6 @@ function App() {
         );
 
         setContract(contract);
-
-        // récupération de toutes mes voitures
-        const allCars = await contract.methods.getAllCars().call();
-        setCars(allCars);
 
       } catch (error) {
         console.error(error);

@@ -72,7 +72,7 @@ export default function DeleteDialog({ index }) {
     return (
         <div>
             <Button variant="outlined" onClick={handleClickOpen}>
-                Delete
+                Supprimer
             </Button>
             <Dialog
                 open={open}
