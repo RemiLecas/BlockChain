@@ -5,11 +5,13 @@ contract CarsContract {
     uint256 public numberCars;
     uint256 totalPrice;
     address owner;
+    bool firstLoad;
 
     constructor() {
         numberCars = 0;
         totalPrice = 0;
         owner = msg.sender;
+        firstLoad = false;
     }
 
     struct Cars {
@@ -155,10 +157,10 @@ contract CarsContract {
             string memory,
             string memory,
             uint256,
-            address,
             uint256,
             string memory,
-            uint256
+            uint256,
+            address
         )
     {
         require(index < carss.length);
@@ -168,10 +170,63 @@ contract CarsContract {
             car.marque,
             car.modele,
             car.annee,
-            car.owner,
             car.price,
             car.fuel,
-            car.power
+            car.power,
+            car.owner
         );
+    }
+
+    //Instancie un jeu de données de test
+    function generateData() public returns (string memory){
+        if (firstLoad == false) {
+            uint256 carsId = carss.length;
+            carss.push(
+                Cars(
+                    carsId,
+                    "Tesla",
+                    "X",
+                    "Electrique",
+                    "Noir",
+                    150,
+                    2022,
+                    42000,
+                    2,
+                    msg.sender
+                )
+            );
+            carss.push(
+                Cars(
+                    carsId,
+                    "Ford",
+                    "Mustang",
+                    "Essence",
+                    "Rouge",
+                    250,
+                    2022,
+                    60099,
+                    3,
+                    msg.sender
+                )
+            );
+            carss.push(
+                Cars(
+                    carsId,
+                    "Renault",
+                    "Scenic",
+                    "Diesel",
+                    "Blanc",
+                    110,
+                    2018,
+                    20000,
+                    2,
+                    msg.sender
+                )
+            );
+            firstLoad = true;
+            return "Donnees initialise";
+        }else{
+            return "Donnees deja initialise";
+        }
     }
 }

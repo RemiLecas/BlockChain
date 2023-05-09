@@ -43,19 +43,15 @@ function App() {
 
         setContract(contract);
 
+        // const count = await contract.methods.getBalance()._method.outputs[0];
+        // setBalance(count);
+
       } catch (error) {
         console.error(error);
       }
     } else {
       console.error("Metamask n'est pas installé sur cette application")
     }
-  }
-
-  async function getBalanced() {
-    // const count = contract.methods.getBalance();
-    console.log('test', contract.methods.getBalance());
-    console.log(contract.methods.getBalance()._method.outputs[0])
-    // setBalance(count)
   }
 
   useEffect(() => {
@@ -67,7 +63,6 @@ function App() {
       <div className="container">
         <p>Wallet : {accounts}</p>
 
-        <button onClick={getBalanced}>Balanced</button>
         <p>{balance}</p>
 
         <hr />

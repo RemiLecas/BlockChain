@@ -13,7 +13,7 @@ function ListCars() {
     const [cars, setCars] = useState([]);
     const [accounts, setAccounts] = useState([]);
     const [value, setValue] = useState(0);
-
+    const [firstLoad, setFirstLoad] = useState(false);
 
     async function init() {
         if (window.ethereum) {
@@ -44,6 +44,7 @@ function ListCars() {
 
                 setContract(contract);
 
+
                 // récupération de toutes mes voitures
                 const allCars = await contract.methods.getAllCars().call();
                 console.log(allCars);
@@ -57,8 +58,23 @@ function ListCars() {
         }
     }
 
+    async function initData(){
+        // Génération de mes voitures de tests
+        if (!firstLoad) {
+            try {
+                await contract.methods.generateData().send({ from: accounts[0] });
+            } catch (error) {
+                console.error(error);
+            }
+            setFirstLoad(true);
+        } else {
+            console.log("Données déja instancié")
+        }
+    }
+
     useEffect(() => {
         init();
+        initData();
     }, [])
 
     return (
