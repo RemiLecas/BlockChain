@@ -30,6 +30,7 @@ contract CarsContract {
     }
 
     Cars[] public carss;
+    mapping(address => Cars[]) public myCars;
 
     function addCars(
         string memory _marque,
@@ -110,7 +111,7 @@ contract CarsContract {
         uint256 _price
     ) public {
         // Vérification de l'index si il est valide
-        require(index < carss.length, "Index invalide");
+        require(index < carss.length);
         require(msg.sender == carss[index].owner);
         Cars storage car = carss[index]; // Récupère la voiture à l'index donné
 
@@ -150,19 +151,17 @@ contract CarsContract {
         return (owner == msg.sender);
     }
 
-    function getByIndex(
-        uint256 index
-    )
+    function getByIndex(uint256 index)
         public
         view
         returns (
             string memory,
             string memory,
             uint256,
+            address,
             uint256,
             string memory,
-            uint256,
-            address
+            uint256
         )
     {
         require(index < carss.length);
@@ -172,15 +171,15 @@ contract CarsContract {
             car.marque,
             car.modele,
             car.annee,
+            car.owner,
             car.price,
             car.fuel,
-            car.power,
-            car.owner
+            car.power
         );
     }
 
-    //Instancie un jeu de données de test
-    function generateData() public returns (string memory){
+    //Generate data
+    function generateData() public returns (string memory) {
         if (firstLoad == false) {
             uint256 carsId = carss.length;
             carss.push(
@@ -227,8 +226,36 @@ contract CarsContract {
             );
             firstLoad = true;
             return "Donnees initialise";
-        }else{
+        } else {
             return "Donnees deja initialise";
         }
+    }
+
+    // Achat de voiture via la money de l'utilisateur
+    function buyCar(uint256 index) public payable {
+        //Vérifie si l'utilisateur à la money nécessaire à la transaction
+
+        // On mets le montant de la voiture en Eth dans la variable amountPaid
+        uint256 amountPaid = carss[index].priceInEth;
+
+        if (money >= amountPaid) {
+            //Retire la valeur de la voiture du portefeuille de l'utilisateur
+            money = money - amountPaid;
+
+            Cars storage car = carss[index];
+
+            //Ajoute la voiture achété au tableau myCar
+            myCars[msg.sender].push(car);
+
+            // Supprime la voiture du tableau carss qui représente toutes les voitures disponible à la vente
+            if (index < carss.length - 1) {
+                carss[index] = carss[carss.length - 1];
+            }
+            carss.pop();
+        }
+    }
+
+    function getMyCars() public view returns (Cars[] memory) {
+        return myCars[msg.sender];
     }
 }
