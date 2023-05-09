@@ -6,12 +6,14 @@ contract CarsContract {
     uint256 totalPrice;
     address owner;
     bool firstLoad;
+    uint256 money;
 
     constructor() {
         numberCars = 0;
         totalPrice = 0;
         owner = msg.sender;
         firstLoad = false;
+        money = 1000;
     }
 
     struct Cars {
@@ -92,8 +94,8 @@ contract CarsContract {
     }
 
     // Récupére le montant total du compte de l'utilisateur
-    function getBalance() public view returns (uint256) {
-        return msg.sender.balance;
+    function getMoney() public view returns (uint256) {
+        return money;
     }
 
     // Permet de modifier une voiture
