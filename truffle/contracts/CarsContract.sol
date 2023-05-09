@@ -258,4 +258,27 @@ contract CarsContract {
     function getMyCars() public view returns (Cars[] memory) {
         return myCars[msg.sender];
     }
+
+        function sellCar(uint256 index, uint256 price) public {
+        require(
+            index < myCars[msg.sender].length,
+            "L'index de la voiture est invalide"
+        );
+
+        Cars storage car = myCars[msg.sender][index];
+
+        // Met à jour le prix de la voiture
+        car.priceInEth = price;
+
+        // Transfère la propriété de la voiture à l'adresse du contrat
+        car.owner = address(this);
+
+        // Ajoute la voiture au tableau carss
+        carss.push(car);
+
+        // Supprime la voiture du tableau myCars
+        delete myCars[msg.sender][index];
+
+        money += price;
+    }
 }
