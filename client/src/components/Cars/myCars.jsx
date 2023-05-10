@@ -71,6 +71,7 @@ function MyCars() {
                 <div key={index}>
                     <div className="card">
                         <div className="container">
+                            {index}
                             <h5>Marque : {car.marque} </h5>
                             <h5>Modèle : {car.modele} </h5>
                             <h5>Année : {car.annee} </h5>

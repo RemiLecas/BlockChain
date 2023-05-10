@@ -75,8 +75,6 @@ contract CarsContract {
             myCars[index] = myCars[myCars.length - 1];
         }
         myCars.pop();
-
-        // delete myCars[index];
     }
 
     // Récupére le montant total du compte de l'utilisateur
@@ -96,9 +94,9 @@ contract CarsContract {
         uint256 _price
     ) public {
         // Vérification de l'index si il est valide
-        require(index < carss.length);
-        require(msg.sender == carss[index].owner);
-        Cars storage car = carss[index]; // Récupère la voiture à l'index donné
+        require(index < myCars.length);
+        require(msg.sender == myCars[index].owner);
+        Cars storage car = myCars[index]; // Récupère la voiture à l'index donné
 
         car.marque = _marque;
         car.modele = _modele;
@@ -110,7 +108,7 @@ contract CarsContract {
         car.owner = msg.sender;
 
         // Calcul du prix de la voiture en ethereum
-        uint256 _priceInEth = (_price % 1714);
+        uint256 _priceInEth = (_price / 1714);
         car.priceInEth = _priceInEth;
     }
 
@@ -136,27 +134,26 @@ contract CarsContract {
         public
         view
         returns (
-            string memory,
-            string memory,
-            uint256,
-            address,
-            uint256,
-            string memory,
-            uint256
+            string memory marque,
+            string memory modele,
+            uint256 annee,
+            string memory color,
+            string memory fuel,
+            uint256 power,
+            uint256 price
         )
     {
-        require(index < carss.length);
+        require(index < myCars.length);
 
-        Cars storage car = carss[index];
-        return (
-            car.marque,
-            car.modele,
-            car.annee,
-            car.owner,
-            car.price,
-            car.fuel,
-            car.power
-        );
+        Cars storage car = myCars[index];
+
+        marque = car.marque;
+        modele = car.modele;
+        annee = car.annee;
+        color = car.color;
+        fuel = car.fuel;
+        power = car.power;
+        price = car.price;
     }
 
     //Generate data

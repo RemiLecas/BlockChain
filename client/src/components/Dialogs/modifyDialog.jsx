@@ -61,11 +61,11 @@ function ModifyDialog({ index }) {
 
                 setContract(contract);
 
-
                 const car = await contract.methods.getByIndex(index).call();
                 console.log(car);
+
                 setCar(car);
-                window.location.reload();
+
 
             } catch (error) {
                 console.error(error);
@@ -77,13 +77,24 @@ function ModifyDialog({ index }) {
 
     const modifyCar = async (event) => {
         event.preventDefault();
-        console.log(index)
         if (accounts && accounts[0]) {
-            console.log("j'ai un compte je peux appliquer la modification")
-            await contract.methods.modifyCars(index, marque, modele, fuel, color, power, annee, price).send({ from: accounts[0] });
+
+            const modifyMarque = marque || car.marque;
+            const modifyModele = modele || car.modele;
+            const modifyFuel = fuel || car.fuel;
+            const modifyColor = color || car.color;
+            const modifyPower = power || car.power;
+            const modifyAnnee = annee || car.annee;
+            const modifyPrice = price || car.price;
+
+            await contract.methods.modifyCars(index, modifyMarque, modifyModele, modifyFuel, modifyColor, modifyPower, modifyAnnee, modifyPrice).send({ from: accounts[0] });
+
+            setOpen(false);
+            window.location.reload();
         } else {
             console.log("Il n'y a pas de compte")
         }
+
     };
 
 
@@ -99,17 +110,18 @@ function ModifyDialog({ index }) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    Êtes vous sur de vouloir la supprimer ?
+                    Êtes vous sur de vouloir la modifier ?
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
+
                         <div>
                             <label>Marque :</label>
                             <input
                                 type="text"
                                 id="marque"
                                 name="marque"
-                                defaultValue={car[0]}
+                                defaultValue={car.marque}
                                 onChange={(e) => setMarque(e.target.value)}
                             />
                             <label>Modele :</label>
@@ -117,7 +129,7 @@ function ModifyDialog({ index }) {
                                 type="text"
                                 id="modele"
                                 name="modele"
-                                defaultValue={car[1]}
+                                defaultValue={car.modele}
                                 onChange={(e) => setModele(e.target.value)}
                             />
                             <label>Fuel :</label>
@@ -125,7 +137,7 @@ function ModifyDialog({ index }) {
                                 type="text"
                                 id="fuel"
                                 name="fuel"
-                                defaultValue={car[2]}
+                                defaultValue={car.fuel}
                                 onChange={(e) => setFuel(e.target.value)}
                             />
                             <label>Color :</label>
@@ -133,7 +145,7 @@ function ModifyDialog({ index }) {
                                 type="text"
                                 id="color"
                                 name="color"
-                                defaultValue={car[3]}
+                                defaultValue={car.color}
                                 onChange={(e) => setColor(e.target.value)}
                             />
                             <label>Power :</label>
@@ -141,7 +153,7 @@ function ModifyDialog({ index }) {
                                 type="number"
                                 id="power"
                                 name="power"
-                                defaultValue={car[4]}
+                                defaultValue={car.power}
                                 onChange={(e) => setPower(e.target.value)}
                             />
                             <label>Annee :</label>
@@ -149,7 +161,7 @@ function ModifyDialog({ index }) {
                                 type="number"
                                 id="annee"
                                 name="annee"
-                                defaultValue={car[5]}
+                                defaultValue={car.annee}
                                 onChange={(e) => setAnnee(e.target.value)}
                             />
                             <label>Price :</label>
@@ -157,9 +169,9 @@ function ModifyDialog({ index }) {
                                 type="number"
                                 id="price"
                                 name="price"
-                                defaultValue={car[6]}
+                                defaultValue={car.price}
                                 onChange={(e) => setPrice(e.target.value)}
-                            />                          
+                            />
                         </div>
 
                     </DialogContentText>
