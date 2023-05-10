@@ -71,7 +71,12 @@ contract CarsContract {
         require(index < myCars.length);
         require(msg.sender == myCars[index].owner);
 
-        delete myCars[index];
+        if (index < myCars.length - 1) {
+            myCars[index] = myCars[myCars.length - 1];
+        }
+        myCars.pop();
+
+        // delete myCars[index];
     }
 
     // Récupére le montant total du compte de l'utilisateur
@@ -168,7 +173,7 @@ contract CarsContract {
                     150,
                     2022,
                     42000,
-                    2,
+                    25,
                     msg.sender
                 )
             );
@@ -182,7 +187,7 @@ contract CarsContract {
                     250,
                     2022,
                     60099,
-                    3,
+                    35,
                     msg.sender
                 )
             );
@@ -196,7 +201,7 @@ contract CarsContract {
                     110,
                     2018,
                     20000,
-                    2,
+                    12,
                     msg.sender
                 )
             );

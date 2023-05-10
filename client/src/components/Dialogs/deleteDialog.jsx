@@ -79,7 +79,6 @@ export default function DeleteDialog({ index }) {
             >
                 <DialogTitle id="alert-dialog-title">
                     Êtes vous sur de vouloir la supprimer ?
-                    Index :{index}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
