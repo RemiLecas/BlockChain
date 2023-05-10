@@ -2,18 +2,12 @@
 pragma solidity >=0.4.22 <0.9.0;
 
 contract CarsContract {
-    uint256 public numberCars;
-    uint256 totalPrice;
     address owner;
     bool firstLoad;
-    uint256 money;
 
     constructor() {
-        numberCars = 0;
-        totalPrice = 0;
         owner = msg.sender;
         firstLoad = false;
-        money = 1000;
     }
 
     struct Cars {
@@ -30,7 +24,10 @@ contract CarsContract {
     }
 
     Cars[] public carss;
-    mapping(address => Cars[]) public myCars;
+    // mapping(address => Cars[]) public myCars;
+    // address[] public myCars_result;
+    Cars[] public myCars;
+    mapping(address => uint256) balances;
 
     function addCars(
         string memory _marque,
@@ -45,7 +42,7 @@ contract CarsContract {
         address _owner;
 
         // Calcul du prix de la voiture en ethereum
-        uint256 _priceInEth = (_price % 1714);
+        uint256 _priceInEth = (_price / 1714); // Valeur de l'Eth le vendredi 5/05/2023
 
         carss.push(
             Cars(
@@ -61,11 +58,6 @@ contract CarsContract {
                 _owner
             )
         );
-        // Ajoute +1 au nombre de voiture total
-        numberCars++;
-
-        // Ajoute le prix de la voiture au montant total du parc
-        totalPrice += _price;
     }
 
     // Retourne toutes les voitures
@@ -73,30 +65,18 @@ contract CarsContract {
         return carss;
     }
 
-    // Retourne le prix total de toute les voitures
-    function getTotalPriceCars() public view returns (uint256) {
-        return totalPrice;
-    }
-
     // Permet de supprimer une voiture
     function deleteCars(uint256 index) public {
         // Vérification de l'index s'il est valide + vérification que ca soit bien le owner du véhicule
-        require(index < carss.length);
-        require(msg.sender == carss[index].owner);
+        require(index < myCars.length);
+        require(msg.sender == myCars[index].owner);
 
-        totalPrice -= carss[index].price;
-        numberCars -= 1;
-        delete carss[index];
-    }
-
-    // permet d'avoir le nombre de voiture
-    function getNumbersOfCars() public view returns (uint256) {
-        return numberCars;
+        delete myCars[index];
     }
 
     // Récupére le montant total du compte de l'utilisateur
     function getMoney() public view returns (uint256) {
-        return money;
+        return address(msg.sender).balance;
     }
 
     // Permet de modifier une voiture
@@ -115,9 +95,6 @@ contract CarsContract {
         require(msg.sender == carss[index].owner);
         Cars storage car = carss[index]; // Récupère la voiture à l'index donné
 
-        // On enlève l'ancien prix pour mettre le nouveau
-        totalPrice = totalPrice - carss[index].price;
-
         car.marque = _marque;
         car.modele = _modele;
         car.annee = _annee;
@@ -130,9 +107,6 @@ contract CarsContract {
         // Calcul du prix de la voiture en ethereum
         uint256 _priceInEth = (_price % 1714);
         car.priceInEth = _priceInEth;
-
-        // On actualise le prix total
-        totalPrice += _price;
     }
 
     // Récupére le propriétaire du véhicule
@@ -151,7 +125,9 @@ contract CarsContract {
         return (owner == msg.sender);
     }
 
-    function getByIndex(uint256 index)
+    function getByIndex(
+        uint256 index
+    )
         public
         view
         returns (
@@ -233,21 +209,20 @@ contract CarsContract {
 
     // Achat de voiture via la money de l'utilisateur
     function buyCar(uint256 index) public payable {
-        //Vérifie si l'utilisateur à la money nécessaire à la transaction
-
         // On mets le montant de la voiture en Eth dans la variable amountPaid
         uint256 amountPaid = carss[index].priceInEth;
 
-        if (money >= amountPaid) {
+        if (address(msg.sender).balance >= amountPaid) {
             //Retire la valeur de la voiture du portefeuille de l'utilisateur
-            money = money - amountPaid;
 
-            Cars storage car = carss[index];
+            address(msg.sender).balance - amountPaid;
+
+            Cars storage cars = carss[index];
 
             //Ajoute la voiture achété au tableau myCar
-            myCars[msg.sender].push(car);
+            myCars.push(cars);
 
-            // Supprime la voiture du tableau carss qui représente toutes les voitures disponible à la vente
+            // Supprime la voiture du tableau
             if (index < carss.length - 1) {
                 carss[index] = carss[carss.length - 1];
             }
@@ -256,19 +231,16 @@ contract CarsContract {
     }
 
     function getMyCars() public view returns (Cars[] memory) {
-        return myCars[msg.sender];
+        return myCars;
     }
 
-        function sellCar(uint256 index, uint256 price) public {
-        require(
-            index < myCars[msg.sender].length,
-            "L'index de la voiture est invalide"
-        );
+    function sellCar(uint256 index, uint256 price) public {
+        require(index < myCars.length, "L'index de la voiture est invalide");
 
-        Cars storage car = myCars[msg.sender][index];
+        Cars storage car = myCars[index];
 
         // Met à jour le prix de la voiture
-        car.priceInEth = price;
+        car.priceInEth = (price / 1714);
 
         // Transfère la propriété de la voiture à l'adresse du contrat
         car.owner = address(this);
@@ -276,9 +248,12 @@ contract CarsContract {
         // Ajoute la voiture au tableau carss
         carss.push(car);
 
-        // Supprime la voiture du tableau myCars
-        delete myCars[msg.sender][index];
+        // Supprime la voiture du tableau
+        if (index < myCars.length - 1) {
+            myCars[index] = myCars[carss.length - 1];
+        }
+        myCars.pop();
 
-        money += price;
+        address(msg.sender).balance + car.priceInEth;
     }
 }

@@ -1,19 +1,23 @@
 import Web3 from "web3";
-
-import BuyDialog from "../Dialogs/buyDialog";
+import DeleteDialog from "../Dialogs/deleteDialog";
+import ModifyDialog from "../Dialogs/modifyDialog";
+import SellDialog from "../Dialogs/sellDialog";
 import { useEffect, useState } from "react";
 import "./List.css";
 
 import CarsContract from "../../contracts/CarsContract.json";
 
-function ListCars() {
+function MyCars() {
     const [contract, setContract] = useState(null);
     const [web3, setWeb3] = useState(null);
-    const [cars, setCars] = useState([]);
+    const numberCars = 0;
+    const [myCars, setMyCars] = useState([]);
     const [accounts, setAccounts] = useState([]);
+    const [value, setValue] = useState(0);
     const [firstLoad, setFirstLoad] = useState(false);
 
-    async function getAllCars() {
+    async function getMyCars() {
+        console.log("getMyCars()")
         if (window.ethereum) {
 
             try {
@@ -43,9 +47,9 @@ function ListCars() {
                 setContract(contract);
 
                 // récupération de toutes mes voitures
-                const allCars = await contract.methods.getAllCars().call();
-                console.log(allCars);
-                setCars(allCars);
+                const myCars = await contract.methods.getMyCars().call();
+                console.log(myCars);
+                setMyCars(myCars);
 
             } catch (error) {
                 console.error(error);
@@ -55,65 +59,15 @@ function ListCars() {
         }
     }
 
-    async function initData() {
-        if (!firstLoad) {
-            if (window.ethereum) {
-
-                try {
-
-                    // demande la connexion à metamask
-                    await window.ethereum.enable();
-
-                    // J'init de mon web3
-                    const web3 = new Web3(window.ethereum);
-                    setWeb3(web3);
-
-                    // Récupération du compte MetaMask
-                    const accounts = await web3.eth.getAccounts();
-                    setAccounts(accounts);
-
-                    // Initialisation du contrat
-                    // Récupération du networkId
-                    const networkId = await web3.eth.net.getId();
-                    // Récupération du network déployé grâce au network Id
-                    const deployedNetwork = CarsContract.networks[networkId];
-
-                    const contract = new web3.eth.Contract(
-                        CarsContract.abi,
-                        deployedNetwork && deployedNetwork.address,
-                    );
-
-                    setContract(contract);
-
-                    try {
-                        await contract.methods.generateData().send({ from: accounts[0] });
-                    } catch (error) {
-                        console.error(error);
-                    }
-
-
-                } catch (error) {
-                    console.error(error);
-                }
-            } else {
-                console.error("Metamask n'est pas installé sur cette application")
-            }
-            setFirstLoad(true);
-        } else {
-            console.log("Données déja instancié")
-        }
-    }
-
     useEffect(() => {
-        initData();
-        getAllCars();
+        getMyCars();
     }, [])
 
     return (
         <div>
-            <h2>Liste des voitures disponible</h2>
-            <p>Nombre de voiture dans le parc : {cars.length}</p>
-            {cars.map((car, index) => (
+            <h2>Liste de mes voitures</h2>
+            <p>Nombre de voiture dans votre parc: {myCars.length}</p>
+            {myCars.map((car, index) => (
                 <div key={index}>
                     <div className="card">
                         <div className="container">
@@ -125,7 +79,9 @@ function ListCars() {
                             <h5>Puissance : {car.power} </h5>
                             <h5>Prix en € : {car.price} </h5>
                             <h5>Prix en Eth : {car.priceInEth} </h5>
-                            <BuyDialog index={index} />
+                            <ModifyDialog index={index} />
+                            <DeleteDialog index={index} />
+                            <SellDialog index={index} price={car.priceInEth} /> 
 
                         </div>
                     </div>
@@ -135,4 +91,4 @@ function ListCars() {
     );
 }
 
-export default ListCars;
+export default MyCars;

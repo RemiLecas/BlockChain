@@ -5,18 +5,15 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Web3 from "web3";
 import CarsContract from "../../contracts/CarsContract.json";
-import DeleteDialog from './deleteDialog';
 
 function ModifyDialog({ index }) {
     const [contract, setContract] = useState(null);
     const [web3, setWeb3] = useState(null);
-    const numberCars = 0;
     const [car, setCar] = useState([]);
     const [accounts, setAccounts] = useState([]);
-    const [value, setValue] = useState(0);
     const [marque, setMarque] = useState(car.marque);
     const [modele, setModele] = useState(car.modele);
     const [fuel, setFuel] = useState(car.fuel);
@@ -68,7 +65,7 @@ function ModifyDialog({ index }) {
                 const car = await contract.methods.getByIndex(index).call();
                 console.log(car);
                 setCar(car);
-
+                window.location.reload();
 
             } catch (error) {
                 console.error(error);

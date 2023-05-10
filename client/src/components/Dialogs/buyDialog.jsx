@@ -2,19 +2,21 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Web3 from "web3";
 import CarsContract from "../../contracts/CarsContract.json";
 
 
-export default function DeleteDialog({ index }) {
+export default function BuyDialog({ index }) {
     const [open, setOpen] = React.useState(false);
     const [contract, setContract] = useState(null);
     const [web3, setWeb3] = useState(null);
     const [accounts, setAccounts] = useState([]);
+
+    async function init() {
+
+    }
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -24,7 +26,7 @@ export default function DeleteDialog({ index }) {
         setOpen(false);
     };
 
-    const handleGoToDelete = async (event) => {
+    const handleGoToBuy = async (event) => {
         event.preventDefault();
         if (window.ethereum) {
 
@@ -54,9 +56,8 @@ export default function DeleteDialog({ index }) {
 
                 setContract(contract);
 
-                
-                await contract.methods.deleteCars(index).send({ from: accounts[0] });
-                setOpen(false);
+                // Achat de la voiture
+                await contract.methods.buyCar(index).send({ from: accounts[0] });
                 window.location.reload();
             } catch (error) {
                 console.error(error);
@@ -69,7 +70,7 @@ export default function DeleteDialog({ index }) {
     return (
         <div>
             <Button variant="outlined" onClick={handleClickOpen}>
-                Supprimer
+                Acheter
             </Button>
             <Dialog
                 open={open}
@@ -78,18 +79,12 @@ export default function DeleteDialog({ index }) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    Êtes vous sur de vouloir la supprimer ?
-                    Index :{index}
+                    Êtes vous sur de vouloir acheter la voiture ?
                 </DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Toutes suppressions est irrévercible
-                    </DialogContentText>
-                </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Annuler</Button>
-                    <Button onClick={handleGoToDelete} autoFocus>
-                        Ok
+                    <Button onClick={handleGoToBuy} autoFocus>
+                        Acheter
                     </Button>
                 </DialogActions>
             </Dialog>
