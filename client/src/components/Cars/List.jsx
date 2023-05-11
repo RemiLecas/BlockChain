@@ -55,7 +55,7 @@ function ListCars() {
         }
     }
 
-    async function initData() {
+    async function generateData() {
         if (!firstLoad) {
             if (window.ethereum) {
 
@@ -105,13 +105,13 @@ function ListCars() {
     }
 
     useEffect(() => {
-        initData();
         getAllCars();
     }, [])
 
     return (
         <div>
             <h2>Liste des voitures disponible</h2>
+            <button onClick={generateData}>Généré des datas</button>
             <p>Nombre de voiture dans le parc : {cars.length}</p>
             {cars.map((car, index) => (
                 <div key={index}>

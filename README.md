@@ -1,5 +1,7 @@
-Voice mon projet de fin de semaine sur la matière blockchain. Ce dernier consiste à créer une concession de voiture en ligne avec un catalogue permettant l'ajouts, la modification et la suppression de voiture d'un parc automobile tout en permettant à un utilisateur d'acheter des voitures et donc de pouvoir modifier l'annonce de sa voiture à sa guise.
+Voici mon projet de fin de semaine sur la matière blockchain. Ce dernier consiste à créer une concession de voiture en ligne avec un catalogue permettant l'ajouts de voiture à ce dernier et la modification avec la suppression de voiture dans un parc automobile qui nous appartient.
 
-Le contrat à était éffectuer et test avant d'être appliquer sur VSCode sur Remix. Cepandent je n'arrive pas à résoudre certains problèmes qui sont que sur Remix mes fonctions marche très bien mais quand je veux les appliquer au Web cela ne marche plus.
+Le contrat à était éffectuer et tester avant d'être appliquer sur VSCode sur Remix.
 
-Je suis conscient que le code n'est pas parfait et que de nombreuse amélioration peuvent être faites notamment pour la revente du véhicule ou il faudrait détecter le moment ou un utilisateur achète notre véhicule pour avoir les bénéfices de la revente sur notre compte.
+Je suis conscient que mon code n'est pas parfait et qu'il peut être amélioré, notamment en ce qui concerne la revente des véhicules. Il serait nécessaire de détecter le moment où un utilisateur achète notre véhicule afin de calculer les bénéfices de la revente et les créditer sur notre compte.
+
+Malheureusement, je rencontre un problème de connexion entre Metamask et Ganache, et malgré tous mes efforts, je n'ai pas réussi à le résoudre. Cela rend impossible pour moi de réessayer mon application React en utilisant la modification de l'appel de la fonction generateData.
