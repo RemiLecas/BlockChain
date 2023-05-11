@@ -55,7 +55,8 @@ function ListCars() {
         }
     }
 
-    async function generateData() {
+    const generateData = async (event) =>  {
+        event.preventDefault();
         if (!firstLoad) {
             if (window.ethereum) {
 
